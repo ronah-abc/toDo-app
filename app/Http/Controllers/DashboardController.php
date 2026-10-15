@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\TeamInvitation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,6 +34,10 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'pendingInvitations' => $pendingInvitations,
+            'tasks' => $request->user()->tasks()
+                ->latest()
+                ->get()
+                ->map(fn (Task $task) => $task->toTaskData()),
         ]);
     }
 }
